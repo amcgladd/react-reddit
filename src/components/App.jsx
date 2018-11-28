@@ -1,13 +1,15 @@
 import React from 'react';
-import ContainerComponent from './ContainerComponent';
+import PostList from './PostList';
 import Error404 from './Error404';
-import { Switch, Route } from 'react-router-dom';
+import { Switch, Route, withRouter } from 'react-router-dom';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 
 class App extends React.Component {
 
-  constructor() {
-    super();
-    this.state = {};
+  constructor(props) {
+    super(props);
+    console.log(props);
   }
 
   render(){
@@ -17,7 +19,9 @@ class App extends React.Component {
           <Route
             exact path='/'
             render={()=>
-              <ContainerComponent />
+              <PostList
+                masterPostList={this.props.masterPostList}
+              />
             }
           />
           <Route
@@ -29,4 +33,18 @@ class App extends React.Component {
   }
 }
 
-export default App;
+const mapStateToProps = (state) => {
+  // let newObject = {};
+  // Object.keys(state.masterPostList).map((post) => {
+  //   console.log(state.masterPostList[post]);
+  // });
+  return {
+    masterPostList: state.masterPostList
+  };
+}
+
+App.propTypes = {
+  masterPostList: PropTypes.object
+}
+
+export default withRouter(connect(mapStateToProps)(App));
